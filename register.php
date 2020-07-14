@@ -3,7 +3,7 @@
     session_start(['cookie_lifetime' => 86400]);
 
     if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])
-        && isset($_POST['submit'])) {
+        && isset($_POST['con-password']) && isset($_POST['submit'])) {
             //Validates the uniqueness of the email.
             $sql = 'SELECT email FROM users WHERE email = :em';
             $stmt = $pdo->prepare($sql);
@@ -58,12 +58,20 @@
                 return;
             }
 
+            //Checks that the password is equal to the confirmed password.
+            if (strcmp($_POST['password'], $_POST['con-password']) !== 0) {
+                $_SESSION['error'] = 'Passwords did not match';
+                header('Location: register.php');
+                return;
+            }
+
             //Insert registration data into the database.
             $hashed_pw = password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $sql = 'INSERT INTO users(email, username, pw) VALUES(:em, :un, :pw)';
+            $sql = 'INSERT INTO users(email, username, pw, privilege) VALUES(:em, :un, :pw, :pri)';
             $stmt = $pdo->prepare($sql);
             $query_result = $stmt->execute(
-                array(':em' => $_POST['email'], ':un' => $_POST['username'], ':pw' => $hashed_pw)
+                array(':em' => $_POST['email'], ':un' => $_POST['username'], ':pw' => $hashed_pw,
+                ':pri' => '2') //The default privilege is '2'. The user can view only public entries.
             );
             if ($query_result === true) {
                 $_SESSION['success'] = 'Registration successful';

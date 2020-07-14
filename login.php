@@ -7,7 +7,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $sql = 'SELECT pw FROM users WHERE username = :un';
+        $sql = 'SELECT pw, privilege FROM users WHERE username = :un';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(
             array(':un' => $username)
@@ -17,6 +17,7 @@
         if ($row !== false) {
             if (password_verify($password, $row['pw'])) { //Runs if password matches
                 $_SESSION['logged-in'] = true;
+                $_SESSION['privilege'] = $row['privilege'];
                 header('Location: index.php');
                 return;
             } else {
