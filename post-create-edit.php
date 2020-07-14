@@ -162,9 +162,8 @@
                 <div class="form-row mt-2">
                     <div class="col">
                         <label for="textarea">entry</label>
-                        <small id="ta-edit-help" class="form-text text-muted">Type in &apos;edit&apos; to edit the post<br>for the above date.</small>
-                        <textarea class="form-control" name="textarea" id="textarea" rows=20></textarea>
                         <small id="ta-format-help" class="form-text text-muted">An empty line is used as a delimiter<br></small>
+                        <textarea class="form-control" name="textarea" id="textarea" rows=20></textarea>
                     </div>
                 </div>
                 <!-- File upload -->
