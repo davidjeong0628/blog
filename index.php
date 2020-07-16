@@ -6,50 +6,14 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <title>David Jeong's Blog</title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="css/nav.css">
+        <title>David Jeong's Blog</title>
     </head>
     <body>
+        <?php require_once "navigation.php" ?>
+        <!-- Table of contents -->
         <div class="container">
-            <div class="row mt-1">
-                <div class="col-auto">
-                    <?php
-                        //If logged in, show a dropdown with options. Otherwise, show "login".
-                        if (isset($_SESSION['logged-in'])) {
-                            echo '<div class="dropdown">'."\n";
-                            echo '<a class="dropdown-toggle" href="#" data-toggle="dropdown">account</a>'."\n";
-                            echo '<div class="dropdown-menu">'."\n";
-                            echo '<a class="dropdown-item" href="account-info.php">account info</a>'."\n";
-                            echo '<a class="dropdown-item" href="logout.php">log out</a>'."\n";
-                            echo '</div></div>';
-                        } else {
-                            echo '<a href="login.php">login</a>';
-                        }
-                    ?>
-                </div>
-                <div class="col-auto">
-                    <?php
-                        if (!isset($_SESSION['logged-in'])) {
-                            echo '<a href="register.php">register</a>';
-                        }
-                    ?>
-                </div>
-                <div class="col-auto">
-                    <a href="index.php">home</a>
-                </div>
-                <div class="col-auto">
-                    <a href="search.php">search</a>
-                </div>
-                <div class="col-auto">
-                    <a href="post-create-edit.php">new/edit post</a>
-                </div>
-            </div>
-            <div class="row my-3">
-                <div class="col">
-                    <h1>David Jeong's Blog</h1>
-                </div>
-            </div>
             <div class="row mt-3">
                 <?php
                     /*

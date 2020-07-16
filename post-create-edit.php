@@ -119,37 +119,11 @@
         <meta charset="utf-8">
         <title>Create/Edit Entries</title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="css/nav.css">
     </head>
     <body>
         <div class="container">
-            <!-- Navigation -->
-            <div class="row mt-1">
-                <div class="col-auto">
-                    <a href="index.php">home</a>
-                </div>
-                <div class="col-auto">
-                    <?php
-                        //If logged in, show a dropdown with options. Otherwise, show "login".
-                        if (isset($_SESSION['logged-in'])) {
-                            echo '<div class="dropdown">'."\n";
-                            echo '<a class="dropdown-toggle" href="#" data-toggle="dropdown">account</a>'."\n";
-                            echo '<div class="dropdown-menu">'."\n";
-                            echo '<a class="dropdown-item" href="account-info.php">account info</a>'."\n";
-                            echo '<a class="dropdown-item" href="logout.php">log out</a>'."\n";
-                            echo '</div></div>';
-                        } else {
-                            echo '<a href="login.php">login</a>';
-                        }
-                    ?>
-                </div>
-                <div class="col-auto">
-                    <?php
-                        if (!isset($_SESSION['logged-in'])) {
-                            echo '<a href="register.php">register</a>';
-                        }
-                    ?>
-                </div>
-            </div>
+            <?php require_once "navigation.php" ?>
             <!-- Date -->
             <form class="mt-3" method="post" enctype="multipart/form-data">
                 <div class="form-row">

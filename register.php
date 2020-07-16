@@ -89,14 +89,13 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Register</title>
+        <title>Sign Up</title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="css/nav.css">
     </head>
     <body>
         <div class="container">
-            <div class="row mt-1">
-                <a class="col-auto" href="index.php">home</a>
-            </div>
+            <?php require_once "navigation.php" ?>
             <form class="mt-3" method="post">
                 <div class="form-row">
                     <div class="col-6">

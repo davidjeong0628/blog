@@ -47,45 +47,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
         <title><?php  ?></title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="css/nav.css">
     </head>
     <body>
         <div class="container">
-            <div class="row mt-1">
-                <div class="col-auto">
-                    <?php
-                        //If logged in, show a dropdown with options. Otherwise, show "login".
-                        if (isset($_SESSION['logged-in'])) {
-                            echo '<div class="dropdown">'."\n";
-                            echo '<a class="dropdown-toggle" href="#" data-toggle="dropdown">account</a>'."\n";
-                            echo '<div class="dropdown-menu">'."\n";
-                            echo '<a class="dropdown-item" href="account-info.php">account info</a>'."\n";
-                            echo '<a class="dropdown-item" href="logout.php">log out</a>'."\n";
-                            echo '</div></div>';
-                        } else {
-                            echo '<a href="login.php">login</a>';
-                        }
-                    ?>
-                </div>
-                <div class="col-auto">
-                    <?php
-                        if (!isset($_SESSION['logged-in'])) {
-                            echo '<a href="register.php">register</a>';
-                        }
-                    ?>
-                </div>
-                <div class="col-auto">
-                    <a href="index.php">home</a>
-                </div>
-                <div class="col-auto">
-                    <a href="search.php">search</a>
-                </div>
-                <div class="col-auto">
-                    <a href="post-create-edit.php">new/edit post</a>
-                </div>
-            </div>
+            <?php require_once "navigation.php" ?>
             <!-- Prints error message OR the date of the entry -->
             <div class="row mt-md-5 justify-content-center">
                 <div class="col-md-8">
