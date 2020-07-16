@@ -2,10 +2,13 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
     <div class="container">
         <a class="navbar-brand mr-auto" href="index.php">dB</a>
-        <?php 
+        <?php
+            /*
+            * If logged in, show a 'sign out' button.
+            */ 
             if (isset($_SESSION['logged-in'])) {
                 echo '<a class="order-md-last" href="logout.php">';
-                echo '<button type="" class="btn btn-outline-danger">';
+                echo '<button type="button" class="btn btn-outline-danger">';
                 echo 'sign out';
                 echo '</button>';
                 echo '</a>';

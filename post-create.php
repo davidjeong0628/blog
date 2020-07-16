@@ -2,8 +2,7 @@
     require_once "pdo.php";
     session_start(['cookie_lifetime' => 86400]);
 
-    if (isset($_POST['date']) && isset($_POST['textarea']) && isset($_POST['radio'])
-        && isset($_POST['submit'])) {
+    if (isset($_POST['textarea']) && isset($_POST['radio']) && isset($_POST['submit'])) {
         /*
         * If the user is not logged in, sends a fail message.
         */
@@ -104,12 +103,6 @@
         $_SESSION['success'] = 'Submission successful';
         header('Location: post-create-edit.php');
         return;
-
-        // if (strcmp('edit', $_POST['textarea']) === 0) {
-        //     //TODO: Retrieve the data for the selected date.
-        //     header('Location: post-create-edit.php');
-        //     return;
-        // }
     }
 ?>
 
@@ -117,60 +110,57 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>Create/Edit Entries</title>
+        <title>New Post</title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
         <link rel="stylesheet" href="css/nav.css">
     </head>
     <body>
         <div class="container">
             <?php require_once "navigation.php" ?>
-            <!-- Date -->
+            <!-- Form -->
             <form class="mt-3" method="post" enctype="multipart/form-data">
+                <!-- 1st row for title input -->
                 <div class="form-row">
-                    <div class="col-6">
-                        <label for="date">date</label>
-                        <input type="date" class="form-control" name="date" id="date">
+                    <div class="form-group col-12">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" id="title">
                     </div>
                 </div>
-                <!-- Textarea -->
-                <div class="form-row mt-2">
-                    <div class="col">
-                        <label for="textarea">entry</label>
-                        <small id="ta-format-help" class="form-text text-muted">An empty line is used as a delimiter<br></small>
-                        <textarea class="form-control" name="textarea" id="textarea" rows=20></textarea>
+                <!-- 2nd row for textarea -->
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="textarea">Entry</label>
+                        <textarea class="form-control" name="textarea" id="textarea" rows="25"></textarea>
                     </div>
                 </div>
-                <!-- File upload -->
-                <div class="form-row mt-2">
-                    <div class="col-auto">
+                <!-- 3rd row for files -->
+                <div class="form-row">
+                    <div class="form-group col-auto">
                         <label for="file">Choose images to upload</label>
                         <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
                         <input type="file" class="form-control-file" name="file[]" id="file" multiple accept="image/*">
                         <small id="file-help" class="form-text text-muted">Each file must be less than 5 MB<br>20 files max</small>
                     </div>
                 </div>
-                <!-- Radio Access -->
-                <div class="form-row mt-2">
+                <!-- 4th row for radio -->
+                <div class="form-row">
                     <div class="col-auto">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="radio" id="radio1" value="1" checked>
-                            <label class="form-check-label" for="radio1">
-                                Public
-                            </label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="radio" id="radio1" value="1">
+                            <label class="form-check-label" for="radio1">Public</label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="radio" id="radio2" value="0">
-                            <label class="form-check-label" for="radio2">
-                                Private
-                            </label>
+                            <label class="form-check-label" for="radio2">Private</label>
                         </div>
                     </div>
                 </div>
+                <!-- Server response -->
                 <div class="row">
-                    <div class="col">
+                    <div class="col-auto">
                         <?php
                             /*
-                            * Prints out a error msg if there was an error.
+                            * Prints out an error msg if there was an error.
                             */
                             if (isset($_SESSION['error'])) {
                                 echo '<p class="text-danger">'.$_SESSION['error'].'</p>';
@@ -183,14 +173,15 @@
                                 unset($_SESSION['success']);
                             }
                         ?>
-                    </div>
+                     </div>
                 </div>
-                <div class="form-row mt-5 align-items-center">
+                <!-- Submit button and cancel button -->
+                <div class="form-row mt-5 pb-4">
                     <div class="col-auto">
-                        <input type="submit" class="form-control" name="submit" value="Submit" id="submit">
+                        <button type="submit" class="btn btn-outline-primary">Submit</button>
                     </div>
                     <div class="col-auto">
-                        <a href="post-create-edit.php">cancel</a>
+                        <button type="reset" class="btn btn-outline-danger">Cancel</button>
                     </div>
                 </div>
             </form>
