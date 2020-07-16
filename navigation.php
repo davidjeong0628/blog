@@ -22,27 +22,32 @@
                     * Otherwise, show 'sign in' and 'sign up'.
                     */ 
                     if (isset($_SESSION['logged-in'])) {
-                        echo '<li class="nav-item">';
+                        echo '<li class="nav-item order-md-4">';
                         echo '<a class="nav-link" href="account.php">account</a>';
                         echo '</li>';
                     } else {
-                        echo '<li class="nav-item">';
+                        echo '<li class="nav-item order-md-4">';
                         echo '<a class="nav-link" href="login.php">sign in</a>';
                         echo '</li>';
                         
-                        echo '<li class="nav-item">';
+                        echo '<li class="nav-item order-md-5">';
                         echo '<a class="nav-link" href="register.php">sign up</a>';
                         echo '</li>';
                     } 
                 ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="post-create-edit.php">new/edit post</a>
+                <!-- articles page -->
+                <li class="nav-item order-md-2">
+                    <a class="nav-link" href="articles.php">articles</a>
                 </li>
-            <!-- Search form -->
-            <form class="form-inline order-md-first" action="search.php">
-                <input class="form-control" type="search" placeholder="YYYY-MM-DD" aria-label="Search">
-                <button class="btn btn-outline-success mt-2 mt-md-0" type="submit">search</button>
-            </form>   
+                <!-- new post page -->
+                <li class="nav-item order-md-3">
+                    <a class="nav-link" href="post-create.php">new post</a>
+                </li>
+                <!-- Search form -->
+                <form class="form-inline order-md-1" action="search.php">
+                    <input name="search" class="form-control" type="search" placeholder="Title or YYYY-MM-DD" aria-label="Search">
+                    <button class="btn btn-outline-success mt-2 mt-md-0 mx-md-2" type="submit">search</button>
+                </form>   
             </ul>
         </div>
     </div>
