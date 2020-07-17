@@ -2,64 +2,68 @@
     require_once "pdo.php";
     session_start(['cookie_lifetime' => 86400]);
 
-    if (isset($_POST['textarea']) && isset($_POST['radio']) && isset($_POST['submit'])) {
+    /*
+    * Handles POST data.
+    */
+    if (isset($_POST['title']) && isset($_POST['textarea']) && isset($_POST['radio'])) {
         /*
         * If the user is not logged in, sends a fail message.
         */
         if (!isset($_SESSION['logged-in'])) {
             $_SESSION['error'] = 'You do not have the permission to submit/edit posts';
-            header('Location: post-create-edit.php');
+            header('Location: post-create.php');
             return;
         }
 
         /*
         * If the logged-in user does not have permission to submit/edit post, sends a fail message.
         */
-        if ($_SESSION['privilege'] !== '0') {
+        if ($_SESSION['privilege'] !== '0') { // A '0' privilege is given to admins.
             $_SESSION['error'] = 'You do not have the permission to submit/edit posts';
-            header('Location: post-create-edit.php');
+            header('Location: post-create.php');
             return;
         }
 
         /*
-        * Validates that the date-field is not empty.
+        * Validates that the title-field is not empty.
         */
-        if (strlen($_POST['date']) < 1) {
-            $_SESSION['error'] = 'Please enter a date';
-            header('Location: post-create-edit.php');
+        if (strlen($_POST['title']) < 1) {
+            $_SESSION['error'] = 'Please enter a title';
+            header('Location: post-create.php');
             return;
         }
 
         /*
-        * Validates that the date is unique.
+        * Validates that the title does not exceed 50 characters.
         */
-        $sql = 'SELECT pub_date FROM articles WHERE pub_date = :pd';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(
-            array(':pd' => $_POST['date'])
-        );
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (strlen($_POST['title']) > 50) {
+            $_SESSION['error'] = 'Title exceeds 50 characters';
+            header('Location: post-create.php');
+            return;
+        }
 
-        //If the date already exists in the database, sends an error message.
-        if ($row !== false) {
-            $_SESSION['error'] = 'A post associated with the inputted date already exists';
-            header('Location: post-create-edit.php');
+        /*
+        * Validates that the textarea is not empty.
+        */
+        if (strlen($_POST['textarea']) < 1) {
+            $_SESSION['error'] = 'Textarea is empty';
+            header('Location: post-create.php');
             return;
         }
 
         /*
         * Inserting the article into the article database.
         */
-        $sql = 'INSERT INTO articles(pub_date, entry_text, access) VALUES(:pd, :et, :ac)';
+        $sql = 'INSERT INTO articles(title, pub_date, edit_date, entry_text, access) VALUES(:tit, :pd, :ed, :et, :ac)';
         $stmt = $pdo->prepare($sql);
         $query_result = $stmt->execute(
-            array(':pd' => $_POST['date'], ':et' => $_POST['textarea'], ':ac' => $_POST['radio'])
+            array(':tit' => $_POST['title'], ':pd' => date('Y-m-d'), ':ed' => date('Y-m-d'), ':et' => $_POST['textarea'], ':ac' => $_POST['radio'])
         );
 
         //If insertion query fails, sends an error message.
         if ($query_result === false) {
             $_SESSION['error'] = 'Submission unsuccessful';
-            header('Location: post-create-edit.php');
+            header('Location: post-create.php');
             return;
         }
 
@@ -70,9 +74,18 @@
         */
         $num_files = count($_FILES['file']['name']);
 
+        /*
+        * If more than 20 files were uploaded, send an error message.
+        */
+        if ($num_files > 20) {
+            $_SESSION['error'] = 'Too many files!';
+            header('Location: post-create.php');
+            return;
+        }
+
         if ($_FILES['file']['name'][0] !== '') {
-            mkdir('imgs/'.$_POST['date']);
-            $uploaddir = 'imgs/'.$_POST['date'].'/'; //Directory to move to.
+            mkdir('imgs/'.date('Y-m-d'));
+            $uploaddir = 'imgs/'.date('Y-m-d').'/'; //Directory to move to.
 
             for ($i = 0; $i < $num_files; $i += 1) {
                 $uploadfile = $uploaddir.basename($_FILES['file']['name'][$i]); //File path.
@@ -80,7 +93,7 @@
                 //If the file failed to move, sends a fail message.
                 if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $uploadfile)) {
                     $_SESSION['error'] = 'File upload unsuccessful';
-                    header('Location: post-create-edit.php');
+                    header('Location: post-create.php');
                     return;
                 }
 
@@ -94,14 +107,14 @@
                 //If the file failed to insert into the database, sends a fail message.
                 if ($query_result === false) {
                     $_SESSION['error'] = 'File upload unsuccessful';
-                    header('Location: post-create-edit.php');
+                    header('Location: post-create.php');
                     return;
                 }
             }
         }
 
         $_SESSION['success'] = 'Submission successful';
-        header('Location: post-create-edit.php');
+        header('Location: post-create.php');
         return;
     }
 ?>
@@ -146,7 +159,7 @@
                 <div class="form-row">
                     <div class="col-auto">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="radio" id="radio1" value="1">
+                            <input class="form-check-input" type="radio" name="radio" id="radio1" value="1" checked>
                             <label class="form-check-label" for="radio1">Public</label>
                         </div>
                         <div class="form-check form-check-inline">
