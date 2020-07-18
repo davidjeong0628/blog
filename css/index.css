@@ -1,12 +1,4 @@
-body {
-    padding-top: 50px;
-}
-
-.navbar-brand {
-    font-weight: 800;
-}
-
-#logo {
+#jumbotron-heading {
     font-family: 'Playfair Display', Arial, Helvetica, sans-serif;
     font-weight: 700;
 }

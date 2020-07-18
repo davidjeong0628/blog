@@ -7,65 +7,28 @@
 <html lang="en">
     <head>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
         <link rel="stylesheet" href="css/nav.css">
+        <link rel="stylesheet" href="css/footer.css">
+        <link rel="stylesheet" href="css/index.css">
         <title>David Jeong's Blog</title>
     </head>
     <body>
         <?php require_once "navigation.php" ?>
         <!-- Main -->
         <main>
-            
+            <!-- Jumbotron -->
+            <div class="jumbotron jumbotron-fluid bg-white">
+                <div class="container">
+                    <h1 id="jumbotron-heading">vida de david</h1>
+                    <p class="lead">This is my blog where I write down my thoughts.</p>
+                    <hr class="my-2">
+                    <p>Click on the button below to check out my posts.</p>
+                    <a href="articles.php?pg=1"><button class="btn btn-outline-dark">Read!</button></a>
+                </div>
+            </div>
         </main>
+        <?php require_once "footer.php" ?>
         <?php require_once "bootstrap/bootstrap-js.php" ?>
     </body>
 </html>
-<!-- <div class="row mt-3">
-                <?php
-                    // /*
-                    // * Without any parameters on index.php, print out the years.
-                    // */
-                    // if (count($_GET) === 0) {
-                    //     $sql = 'SELECT DISTINCT DATE_FORMAT(pub_date, "%Y") AS year FROM articles';
-                    //     $stmt = $pdo->query($sql);
-
-                    //     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    //         echo '<div class="col-xs-4 col-md-2">';
-                    //         echo '<a href="index.php?year='.htmlentities($row['year']).'">'.htmlentities($row['year']).'</a>';
-                    //         echo '</div>';
-                    //     }
-                    // }
-
-                    // /*
-                    // * With the 'year' parameter set, print out the months associated with the year.
-                    // */
-                    // if (isset($_GET['year']) && !isset($_GET['month'])) {
-                    //     $sql = 'SELECT DISTINCT DATE_FORMAT(pub_date, "%m") AS month FROM articles WHERE pub_date LIKE :yr';
-                    //     $stmt = $pdo->prepare($sql);
-                    //     $stmt->execute(
-                    //         array(':yr' => $_GET['year'].'%')
-                    //     );
-
-                    //     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    //         echo '<div class="col-xs-4 col-md-2">';
-                    //         echo '<a href="index.php?year='.$_GET['year'].'&month='.htmlentities($row['month']).'">'.htmlentities($row['month']).'</a>';
-                    //         echo '</div>';
-                    //     }
-                    // }
-
-                    // /*
-                    // * With the 'year' and 'month' parameters set, print out all the dates associated with them.
-                    // */
-                    // if (isset($_GET['year']) && isset($_GET['month'])) {
-                    //     $sql = 'SELECT DISTINCT pub_date FROM articles WHERE pub_date LIKE :plc';
-                    //     $stmt = $pdo->prepare($sql);
-                    //     $stmt->execute(
-                    //         array(':plc' => $_GET['year'].'-'.$_GET['month'].'%')
-                    //     );
-
-                    //     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    //         echo '<div class="col-xs-4 col-md-2">';
-                    //         echo '<a href="entry.php?date='.htmlentities($row['pub_date']).'">'.htmlentities($row['pub_date']).'</a>';
-                    //         echo '</div>';
-                    //     }
-                    // }
-                ?> -->

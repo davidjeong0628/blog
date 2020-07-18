@@ -1,7 +1,7 @@
 <!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand mr-auto" href="index.php">dB</a>
+        <a class="navbar-brand mr-auto" id="logo" href="index.php">dB</a>
         <?php
             /*
             * If logged in, show a 'sign out' button.
@@ -40,7 +40,7 @@
                 ?>
                 <!-- articles page -->
                 <li class="nav-item order-md-2">
-                    <a class="nav-link" href="articles.php">articles</a>
+                    <a class="nav-link" href="articles.php?pg=1">articles</a>
                 </li>
                 <!-- new post page -->
                 <li class="nav-item order-md-3">

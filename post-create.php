@@ -125,6 +125,7 @@
         <meta charset="utf-8">
         <title>New Post</title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
         <link rel="stylesheet" href="css/nav.css">
     </head>
     <body>
