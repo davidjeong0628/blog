@@ -83,9 +83,30 @@
             return;
         }
 
+        /*
+        * If files were uploaded, validates that all are less than 5 MB.
+        * If it exceeds 5 MB, sends an error message.
+        */
         if ($_FILES['file']['name'][0] !== '') {
-            mkdir('imgs/'.date('Y-m-d'));
-            $uploaddir = 'imgs/'.date('Y-m-d').'/'; //Directory to move to.
+            
+            for ($i = 0; $i < $num_files; $i += 1) {
+                if ($_FILES['file']['size'][$i] > 5242880) {
+                    $_SESSION['error'] = 'A file exceeds 5 MB!';
+                    header('Location: post-create.php');
+                    return;
+                }
+            }
+        }
+
+        /*
+        * If files were uploaded, inserts them into the filesystem and database.
+        */
+        if ($_FILES['file']['name'][0] !== '') {
+            $title_no_spaces = str_replace(' ', '-', $_POST['title']); //Replaces all whitespace in the title with a '-'.
+            $img_directory = 'imgs/'.$title_no_spaces.date('Y-m-d'); //Sets up the directory name.
+
+            mkdir($img_directory);  //Creates a directory for the images.
+            $uploaddir = $img_directory.'/'; //Directory to move to.
 
             for ($i = 0; $i < $num_files; $i += 1) {
                 $uploadfile = $uploaddir.basename($_FILES['file']['name'][$i]); //File path.
@@ -113,6 +134,9 @@
             }
         }
 
+        /*
+        * Runs if all submission was successful. Sends a success message.
+        */
         $_SESSION['success'] = 'Submission successful';
         header('Location: post-create.php');
         return;
