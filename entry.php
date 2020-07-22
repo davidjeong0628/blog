@@ -50,15 +50,29 @@
         <?php require_once "bootstrap/bootstrap-css.php" ?>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
         <link rel="stylesheet" href="css/nav.css">
+        <link rel="stylesheet" href="css/entry.css">
     </head>
     <body>
         <?php require_once "navigation.php" ?>
-        <div class="container mt-3">
+        <div class="container mt-3" id="entry-container">
+            <!-- Back, edit, delete links -->
+            <div class="row mb-4">
+                <div class="col mr-auto">
+                    <a href="articles.php?pg=1">Back</a>
+                </div>
+                <div class="col-auto">
+                    <a href="">Edit</a>
+                </div>
+                <div class="col-auto">
+                    <a href="delete.php?aid=<?= $row['article_id'] ?>">Delete</a>
+                </div>
+            </div>
             <?php
                 //Prints an error message if $_SESSION['error'] is set. 
                 if (isset($_SESSION['error'])) {
                     echo '<p class="text-danger">'.$_SESSION['error'].'</p>';
                     unset($_SESSION['error']);
+                    return;
                 }
             ?>
             <!-- Article title -->
@@ -80,12 +94,26 @@
             <div class="row mt-2">
                 <?php 
                     for ($i = 0; $i < count($text); $i += 1) {
-                        if (!empty($text[$i])) {
+                        /*
+                        * If the first character of the 'text' array is not a carriage return,
+                        * print text.
+                        */
+                        if (ord($text[$i]) !== 13) {
                             echo '<div class="col-12">';
                             echo '<p>' . $text[$i] . '</p>';
                             echo '</div>';
                         }
                     }
+                ?>
+            </div>
+            <!-- Images -->
+            <div class="row">
+                <?php 
+                    for ($i = 0; $i < count($images); $i += 1) {
+                        echo '<div class="col-12 mb-2">';
+                        echo '<img src="' . $images[$i][0] . '" class="img-fluid" alt="Blog images">';
+                        echo '</div>';
+                    }  
                 ?>
             </div>
         </div>

@@ -1,0 +1,11 @@
+@media screen and (min-width: 768px) {
+    #entry-container {
+        width: 65%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #entry-container {
+        width: 42%;
+    }
+}
