@@ -3,22 +3,46 @@
     session_start(['cookie_lifetime' => 86400]);
 
     /*
-    * Runs if 'aid' get parameter is set, meaning that the user wants to 
+    * Values for title input and textarea. Used when editing
+    * posts.
+    */
+    $title = '';
+    $text_entry = '';
+
+    /*
+    * Runs if 'aid' GET parameter is set, meaning that the user wants to 
     * edit the post associated with that 'aid'.
     */
     if (isset($_GET['aid'])) {
+
         $sql = 'SELECT title, entry_text, access FROM articles WHERE article_id = :aid';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(
             array(':aid' => $_GET['aid'])
         );
 
+        /*
+        * Runs if an article was fetched. 
+        */
         if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            
+            /*
+            * If the article is set to private and the user is not logged in or does
+            * not have the right privileges, sends an error message.
+            */
             if ($row['access'] === '0' && (!isset($_SESSION['logged-in'])  || $_SESSION['privilege'] === '2')) {
                 $_SESSION['error'] = 'You do not have access to this article!';
                 header('Location: post-create.php');
                 return;
+            }
+
+            /*
+            * If the user is not logged in or does not have the right privileges,
+            * sends an error message.
+            */
+            if (!isset($_SESSION['logged-in'])  || $_SESSION['privilege'] !== '0') {
+                $_SESSION['error'] = 'You do not have the privilege to edit posts!';
+                header('Location: entry.php?aid=' . $_GET['aid']);
+                return; 
             }
             
             $title = $row['title'];
@@ -31,19 +55,11 @@
     */
     if (isset($_POST['title']) && isset($_POST['textarea']) && isset($_POST['radio'])) {
         /*
-        * If the user is not logged in, sends a fail message.
+        * If the user is not logged in or does not have permission to submit post,
+        * sends a fail message.
         */
-        if (!isset($_SESSION['logged-in'])) {
-            $_SESSION['error'] = 'You do not have the permission to submit/edit posts';
-            header('Location: post-create.php');
-            return;
-        }
-
-        /*
-        * If the logged-in user does not have permission to submit/edit post, sends a fail message.
-        */
-        if ($_SESSION['privilege'] !== '0') { // A '0' privilege is given to admins.
-            $_SESSION['error'] = 'You do not have the permission to submit/edit posts';
+        if (!isset($_SESSION['logged-in']) || $_SESSION['privilege'] !== '0') {
+            $_SESSION['error'] = 'You do not have the permission to submit posts';
             header('Location: post-create.php');
             return;
         }
@@ -205,14 +221,14 @@
                 <div class="form-row">
                     <div class="form-group col-12">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" id="title">
+                        <input type="text" class="form-control" name="title" id="title" value="<?= $title ?>">
                     </div>
                 </div>
                 <!-- 2nd row for textarea -->
                 <div class="form-row">
                     <div class="form-group col-12">
                         <label for="textarea">Entry</label>
-                        <textarea class="form-control" name="textarea" id="textarea" rows="25"></textarea>
+                        <textarea class="form-control" name="textarea" id="textarea" rows="25"><?= $text_entry ?></textarea>
                     </div>
                 </div>
                 <!-- 3rd row for files -->
