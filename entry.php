@@ -46,7 +46,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title><?php  ?></title>
+        <title><?= $title ?></title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
         <link rel="stylesheet" href="css/nav.css">
@@ -61,7 +61,7 @@
                     <a href="articles.php?pg=1">Back</a>
                 </div>
                 <div class="col-auto">
-                    <a href="">Edit</a>
+                    <a href="post-create.php?aid=<?= $_GET['aid'] ?>">Edit</a>
                 </div>
                 <div class="col-auto">
                     <a href="delete.php?aid=<?= $row['article_id'] ?>">Delete</a>

@@ -3,6 +3,30 @@
     session_start(['cookie_lifetime' => 86400]);
 
     /*
+    * Runs if 'aid' get parameter is set, meaning that the user wants to 
+    * edit the post associated with that 'aid'.
+    */
+    if (isset($_GET['aid'])) {
+        $sql = 'SELECT title, entry_text, access FROM articles WHERE article_id = :aid';
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(
+            array(':aid' => $_GET['aid'])
+        );
+
+        if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            
+            if ($row['access'] === '0' && (!isset($_SESSION['logged-in'])  || $_SESSION['privilege'] === '2')) {
+                $_SESSION['error'] = 'You do not have access to this article!';
+                header('Location: post-create.php');
+                return;
+            }
+            
+            $title = $row['title'];
+            $text_entry = $row['entry_text'];
+        }
+    }
+
+    /*
     * Handles POST data.
     */
     if (isset($_POST['title']) && isset($_POST['textarea']) && isset($_POST['radio'])) {
@@ -157,6 +181,26 @@
             <?php require_once "navigation.php" ?>
             <!-- Form -->
             <form class="mt-3" method="post" enctype="multipart/form-data">
+                <!-- Server response -->
+                <div class="row">
+                    <div class="col-auto">
+                        <?php
+                            /*
+                            * Prints out an error msg if there was an error.
+                            */
+                            if (isset($_SESSION['error'])) {
+                                echo '<p class="text-danger">'.$_SESSION['error'].'</p>';
+                                unset($_SESSION['error']);
+                            }
+
+                            //Prints out a success msg if submission was successful.
+                            if (isset($_SESSION['success'])) {
+                                echo '<p class="text-success">'.$_SESSION['success'].'</p>';
+                                unset($_SESSION['success']);
+                            }
+                        ?>
+                     </div>
+                </div>
                 <!-- 1st row for title input -->
                 <div class="form-row">
                     <div class="form-group col-12">
@@ -192,26 +236,6 @@
                             <label class="form-check-label" for="radio2">Private</label>
                         </div>
                     </div>
-                </div>
-                <!-- Server response -->
-                <div class="row">
-                    <div class="col-auto">
-                        <?php
-                            /*
-                            * Prints out an error msg if there was an error.
-                            */
-                            if (isset($_SESSION['error'])) {
-                                echo '<p class="text-danger">'.$_SESSION['error'].'</p>';
-                                unset($_SESSION['error']);
-                            }
-
-                            //Prints out a success msg if submission was successful.
-                            if (isset($_SESSION['success'])) {
-                                echo '<p class="text-success">'.$_SESSION['success'].'</p>';
-                                unset($_SESSION['success']);
-                            }
-                        ?>
-                     </div>
                 </div>
                 <!-- Submit button and cancel button -->
                 <div class="form-row mt-5 pb-4">
