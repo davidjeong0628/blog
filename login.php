@@ -7,26 +7,39 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $sql = 'SELECT pw, privilege FROM users WHERE username = :un';
+        $sql = 'SELECT user_id, pw, privilege FROM users WHERE username = :un';
         $stmt = $pdo->prepare($sql);
         $stmt->execute(
             array(':un' => $username)
         );
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        /*
+        * If a row was fetched, meaning that the username exists in the database,
+        * verifies the password.
+        */
         if ($row !== false) {
             if (password_verify($password, $row['pw'])) { //Runs if password matches
+                $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['logged-in'] = true;
                 $_SESSION['privilege'] = $row['privilege'];
+
                 header('Location: index.php');
                 return;
-            } else {
+            } else { //Runs if password does not match
                 $_SESSION['error'] = "Incorrect username/password";
+
                 header('Location: login.php');
                 return;
             }
+        /*
+        * If a row was not fetched, meaning that the username does not exist in the database,
+        * sends an error message.
+        */
         } else {
             $_SESSION['error'] = "Incorrect username/password";
+
             header('Location: login.php');
             return;
         }
@@ -45,20 +58,23 @@
         <div class="container">
             <?php require_once "navigation.php" ?>
             <form class="mt-3" method="post">
-                <div class="form-row">
-                    <div class="col-6">
+                <!-- Username -->
+                <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <label for="username">username</label>
                         <input type="text" class="form-control" name="username" id="username">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-6">
+                <!-- Password -->
+                <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <label for="password">password</label>
                         <input type="password" class="form-control" name="password" id="password">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
+                <!-- Possible error message -->
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <?php
                             //Prints out an error message if username/pw was incorrect
                             if (isset($_SESSION['error'])) {
@@ -68,12 +84,10 @@
                         ?>
                     </div>
                 </div>
-                <div class="form-row mt-2 align-items-center">
+                <!-- Sign in button -->
+                <div class="form-row mt-2 align-items-center justify-content-center">
                     <div class="col-auto">
                         <input type="submit" name="submit" value="Log In">
-                    </div>
-                    <div class="col-auto">
-                        <a href="forgot-pw.php">Forgot Password?</a>
                     </div>
                 </div>
             </form>

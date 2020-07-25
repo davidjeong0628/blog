@@ -3,10 +3,38 @@
     session_start(['cookie_lifetime' => 86400]);
 
     /*
+    * If the user is not logged in or does not have the right privilege, count only public
+    * access articles.
+    */
+    if (!isset($_SESSION['logged-in']) || $_SESSON['privilege'] === '2') {
+        $sql = "SELECT COUNT(article_id) AS art_count FROM articles WHERE access='1'";
+        $stmt = $pdo->query($sql);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $art_count = $row['art_count'];
+    /*
+    * If the user is logged in and has the right privilege, count all articles.
+    */
+    } else {
+        $sql = "SELECT COUNT(article_id) AS art_count FROM articles";
+        $stmt = $pdo->query($sql);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $art_count = $row['art_count'];
+    }
+
+    $num_pages = ceil($art_count / 3); //The total number of pages required to show articles.
+
+    /*
     * If the page argument is not set or it is less than 1, redirect to page 1.
     */
     if (!isset($_GET['pg']) || $_GET['pg'] < 1) {
         header('Location: articles.php?pg=1');
+        return;
+    }
+
+    if ($_GET['pg'] > $num_pages) {
+        header('Location: articles.php?pg=' . $num_pages);
         return;
     }
 

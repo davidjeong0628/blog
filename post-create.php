@@ -92,86 +92,31 @@
         }
 
         /*
-        * Inserting the article into the article database.
+        * If 'aid' GET parameter is set, updates the article associated with that id.
         */
-        $sql = 'INSERT INTO articles(title, pub_date, edit_date, entry_text, access) VALUES(:tit, :pd, :ed, :et, :ac)';
-        $stmt = $pdo->prepare($sql);
-        $query_result = $stmt->execute(
-            array(':tit' => $_POST['title'], ':pd' => date('Y-m-d'), ':ed' => date('Y-m-d'), ':et' => $_POST['textarea'], ':ac' => $_POST['radio'])
-        );
+        if (isset($_GET['aid'])) {
+            $sql = 'UPDATE articles SET title = :tit, edit_date = :edd, entry_text = :et, 
+                access = :ac WHERE article_id = :aid';
+            $stmt = $pdo->prepare($sql);
+            $query_result = $stmt->execute(
+                array(':tit' => $_POST['title'], ':edd' => date('Y-m-d'), ':et' => $_POST['textarea'], ':ac' => $_POST['radio'], ':aid' => $_GET['aid'])
+            );
+        /*
+        * If 'aid' GET parameter is not set, inserts a new article.
+        */
+        } else {
+            $sql = 'INSERT INTO articles(title, pub_date, edit_date, entry_text, access) VALUES(:tit, :pd, :ed, :et, :ac)';
+            $stmt = $pdo->prepare($sql);
+            $query_result = $stmt->execute(
+                array(':tit' => $_POST['title'], ':pd' => date('Y-m-d'), ':ed' => date('Y-m-d'), ':et' => $_POST['textarea'], ':ac' => $_POST['radio'])
+            );
+        }
 
         //If insertion query fails, sends an error message.
         if ($query_result === false) {
             $_SESSION['error'] = 'Submission unsuccessful';
             header('Location: post-create.php');
             return;
-        }
-
-        $article_id = $pdo->lastInsertID(); //Retrieves the previously inserted article's id.
-
-        /*
-        * Validating, moving, and inserting uploaded images.
-        */
-        $num_files = count($_FILES['file']['name']);
-
-        /*
-        * If more than 20 files were uploaded, send an error message.
-        */
-        if ($num_files > 20) {
-            $_SESSION['error'] = 'Too many files!';
-            header('Location: post-create.php');
-            return;
-        }
-
-        /*
-        * If files were uploaded, validates that all are less than 5 MB.
-        * If it exceeds 5 MB, sends an error message.
-        */
-        if ($_FILES['file']['name'][0] !== '') {
-            
-            for ($i = 0; $i < $num_files; $i += 1) {
-                if ($_FILES['file']['size'][$i] > 5242880) {
-                    $_SESSION['error'] = 'A file exceeds 5 MB!';
-                    header('Location: post-create.php');
-                    return;
-                }
-            }
-        }
-
-        /*
-        * If files were uploaded, inserts them into the filesystem and database.
-        */
-        if ($_FILES['file']['name'][0] !== '') {
-            $title_no_spaces = str_replace(' ', '-', $_POST['title']); //Replaces all whitespace in the title with a '-'.
-            $img_directory = 'imgs/'.$title_no_spaces.date('Y-m-d'); //Sets up the directory name.
-
-            mkdir($img_directory);  //Creates a directory for the images.
-            $uploaddir = $img_directory.'/'; //Directory to move to.
-
-            for ($i = 0; $i < $num_files; $i += 1) {
-                $uploadfile = $uploaddir.basename($_FILES['file']['name'][$i]); //File path.
-
-                //If the file failed to move, sends a fail message.
-                if (!move_uploaded_file($_FILES['file']['tmp_name'][$i], $uploadfile)) {
-                    $_SESSION['error'] = 'File upload unsuccessful';
-                    header('Location: post-create.php');
-                    return;
-                }
-
-                //Inserts the image into the image database.
-                $sql = 'INSERT INTO images(url, article_id) VALUES(:url, :aid)';
-                $stmt = $pdo->prepare($sql);
-                $query_result = $stmt->execute(
-                    array(':url' => $uploadfile, ':aid' => $article_id)
-                );
-
-                //If the file failed to insert into the database, sends a fail message.
-                if ($query_result === false) {
-                    $_SESSION['error'] = 'File upload unsuccessful';
-                    header('Location: post-create.php');
-                    return;
-                }
-            }
         }
 
         /*
@@ -231,16 +176,7 @@
                         <textarea class="form-control" name="textarea" id="textarea" rows="25"><?= $text_entry ?></textarea>
                     </div>
                 </div>
-                <!-- 3rd row for files -->
-                <div class="form-row">
-                    <div class="form-group col-auto">
-                        <label for="file">Choose images to upload</label>
-                        <input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>
-                        <input type="file" class="form-control-file" name="file[]" id="file" multiple accept="image/*">
-                        <small id="file-help" class="form-text text-muted">Each file must be less than 5 MB<br>20 files max</small>
-                    </div>
-                </div>
-                <!-- 4th row for radio -->
+                <!-- 3rd row for radio -->
                 <div class="form-row">
                     <div class="col-auto">
                         <div class="form-check form-check-inline">

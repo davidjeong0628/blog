@@ -91,40 +91,46 @@
         <meta charset="utf-8">
         <title>Sign Up</title>
         <?php require_once "bootstrap/bootstrap-css.php" ?>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
         <link rel="stylesheet" href="css/nav.css">
     </head>
     <body>
         <div class="container">
             <?php require_once "navigation.php" ?>
             <form class="mt-3" method="post">
-                <div class="form-row">
-                    <div class="col-6">
+                <!-- Email -->
+                <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <label for="email">email</label>
                         <input type="email" class="form-control" name="email" id="email">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-6">
+                <!-- Username -->
+                <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <label for="username">username</label>
                         <input type="text" class="form-control" name="username" id="username" aria-describedby="un-help">
                         <small id="un-help" class="form-text text-muted">a-z, A-Z, 0-9, no spaces<br>11 chars max</small>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-6">
+                <!-- Password -->
+                <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <label for="password">password</label>
                         <input type="password" class="form-control" name="password" id="password" aria-describedby="pw-help">
                         <small id="pw-help" class="form-text text-muted">a-z, A-Z, 0-9, special characters<br>10-26 chars</small>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-6">
+                <!-- Confirm password -->
+                <div class="form-row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <label for="confirm-password">confirm password</label>
                         <input type="password" class="form-control" name="con-password" id="confirm-password">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
+                <!-- Possible error message -->
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-6">
                         <?php
                             //Prints out an error message if registration was unsuccessful.
                             if (isset($_SESSION['error'])) {
@@ -140,7 +146,8 @@
                         ?>
                     </div>
                 </div>
-                <div class="form-row mt-2 align-items-center">
+                <!-- Register button and cancel  -->
+                <div class="form-row mt-2 align-items-center justify-content-center">
                     <div class="col-auto">
                         <input type="submit" name="submit" value="Register">
                     </div>

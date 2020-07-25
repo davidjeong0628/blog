@@ -22,8 +22,6 @@
     );
 
     if ($query_result === true) {
-        
-
         header('Location: articles.php?pg=1');
         return;
     } else {

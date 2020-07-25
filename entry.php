@@ -30,15 +30,7 @@
             //If the retrieved post is private and the user does not have the right privilege, send an error message.
             } else if ($access === '0' && $_SESSION['privilege'] === '2') {
                 $_SESSION['error'] = 'You do not have the permission to view this entry.';
-            //Retrieve images associated with the post.
-            } else {
-                $sql = 'SELECT url FROM images JOIN articles ON images.article_id=articles.article_id WHERE images.article_id=:aid';
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute(
-                    array(':aid' => $row['article_id'])
-                );
-                $images = $stmt->fetchAll(PDO::FETCH_NUM); //An array with the urls of the images associated with the post.
-            }
+            } 
         }
     }
 ?>
@@ -104,16 +96,6 @@
                             echo '</div>';
                         }
                     }
-                ?>
-            </div>
-            <!-- Images -->
-            <div class="row">
-                <?php 
-                    for ($i = 0; $i < count($images); $i += 1) {
-                        echo '<div class="col-12 mb-2">';
-                        echo '<img src="' . $images[$i][0] . '" class="img-fluid" alt="Blog images">';
-                        echo '</div>';
-                    }  
                 ?>
             </div>
         </div>
