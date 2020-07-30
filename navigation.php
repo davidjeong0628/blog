@@ -45,12 +45,7 @@
                 <!-- new post page -->
                 <li class="nav-item order-md-3">
                     <a class="nav-link" href="post-create.php">new post</a>
-                </li>
-                <!-- Search form -->
-                <form class="form-inline order-md-1" action="search.php">
-                    <input name="search" class="form-control" type="search" placeholder="Title or YYYY-MM-DD" aria-label="Search">
-                    <button class="btn btn-outline-success mt-2 mt-md-0 mx-md-2" type="submit">search</button>
-                </form>   
+                </li>  
             </ul>
         </div>
     </div>

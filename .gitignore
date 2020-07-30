@@ -1,3 +1,5 @@
 pdo.php
 *.jpg
 *.JPG
+.vs
+.gitignore
